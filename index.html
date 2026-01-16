@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Compliment Generator | Portfolio PM</title>
+    <!-- Importing Google Fonts for Montserrat and Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* THE EXECUTIVE SAGE PALETTE
+           Primary: #006F87 (Deep Teal)
+           Secondary: #CFFFEA (Soft Mint)
+           Background: #F9F9F9 (Off-White)
+           Text: #1A1A1A (Soft Black)
+        */
+
+        :root {
+            --primary: #006F87;
+            --primary-hover: #005668;
+            --secondary: #CFFFEA;
+            --bg-color: #F9F9F9;
+            --text-color: #1A1A1A;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 32px;
+        }
+
+        /* Form Elements */
+        .controls {
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-color);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 111, 135, 0.1);
+        }
+
+        .generate-btn {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .generate-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Display Area */
+        .display-area {
+            margin-top: 40px;
+            padding: 30px;
+            background-color: var(--secondary);
+            border-radius: 12px;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        #compliment-text {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .placeholder-text {
+            color: rgba(0, 111, 135, 0.6);
+            font-style: italic;
+        }
+
+        /* Action Buttons */
+        .copy-btn {
+            background: #fff;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: none; /* Hidden until a compliment is generated */
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Recognition Generator</h1>
+        <p class="subtitle">Fuel a culture of appreciation with professional praise.</p>
+
+        <div class="controls">
+            <label for="category-select">Focus Area</label>
+            <select id="category-select">
+                <option value="technical">Technical Excellence</option>
+                <option value="leadership">Strategic Leadership</option>
+                <option value="teamwork">Team Player</option>
+                <option value="growth">Growth Mindset</option>
+            </select>
+            <button class="generate-btn" id="generate-btn">Generate Praise</button>
+        </div>
+
+        <div class="display-area" id="display-area">
+            <p id="compliment-text" class="placeholder-text">Choose a category and click generate...</p>
+            <button class="copy-btn" id="copy-btn">Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <script>
+        // Data Structure for compliments (Total: 100)
+        const library = {
+            technical: [
+                "Your ability to simplify complex technical concepts is a massive asset to the project's success.",
+                "The precision and clarity in your latest code review set a high standard for the entire team.",
+                "I'm consistently impressed by your thoroughness in identifying edge cases before they become issues.",
+                "Your technical problem-solving during this sprint saved us days of potential rework.",
+                "The way you architected this feature shows a deep understanding of long-term scalability.",
+                "You have a magical way of making debugging look like a casual hobby.",
+                "Your attention to detail is so sharp, I'm pretty sure you can see semicolons in your sleep.",
+                "Is it just me, or does the Wi-Fi actually get faster when you walk into the server room?",
+                "Your logic is so sound, it could probably win an argument with a calculator.",
+                "You don't just solve problems; you make them apologize for existing.",
+                "The way you document processes is a love letter to future developers.",
+                "I've seen wizards with less technical skill than you show in a standard stand-up meeting.",
+                "Your mastery of these tools is so high, the software should probably start paying you rent.",
+                "If technical skill were a superpower, you'd definitely have a cool cape and a secret base.",
+                "You find bugs so quickly, I'm starting to think you have them on payroll as informants.",
+                "Your spreadsheets are works of art that belong in a digital Louvre.",
+                "You handle legacy code with the patience of a saint and the skill of an archaeologist.",
+                "I'm 90% sure your keyboard has a 'Solve Everything' button that the rest of us don't have.",
+                "The speed at which you learn new tech stacks is borderline supernatural.",
+                "Your commitment to clean code makes our repository a much happier place to live.",
+                "You have the rare ability to bridge the gap between 'tech-speak' and 'human-speak'.",
+                "Watching you fix a critical error is like watching a master chef handle a kitchen fire—cool and effective.",
+                "You don't just meet requirements; you exceed them with a flair for efficiency.",
+                "Your technical intuition is usually more reliable than a weather forecast.",
+                "You've turned 'technical debt' into 'technical dividends' with your refactoring work."
+            ],
+            leadership: [
+                "Your guidance during the recent project pivot kept the team focused and motivated.",
+                "You have a natural ability to foster consensus among diverse stakeholders.",
+                "I appreciate how you lead by example, maintaining a calm and strategic outlook under pressure.",
+                "Your mentorship is clearly making a positive impact on the professional growth of the junior staff.",
+                "The strategic vision you've provided for this quarter has given the team incredible clarity.",
+                "You lead meetings so well that I actually forget I have twenty other tabs open.",
+                "Your decision-making is so decisive, I'm starting to think you have a crystal ball.",
+                "You manage chaos with the grace of a symphony conductor.",
+                "The way you protect the team from distractions is basically a human firewall service.",
+                "I've seen generals with less tactical awareness than you show in a project planning phase.",
+                "Your feedback is like a perfectly brewed coffee: strong, helpful, and keeps us moving.",
+                "You have the unique ability to make hard work feel like an epic adventure.",
+                "The way you empower others to take ownership is a masterclass in modern management.",
+                "You don't just manage projects; you build people while the project happens.",
+                "Your 'open door' policy is actually used, which speaks volumes about the trust you've built.",
+                "I appreciate how you celebrate our wins, no matter how small they might seem.",
+                "You have a knack for finding the 'hidden talent' in every team member.",
+                "Your leadership style is a perfect blend of 'getting things done' and 'making sure everyone is okay'.",
+                "You navigate office politics with the skill of a professional diplomat.",
+                "Even when things go wrong, your composure makes us all believe we can fix it.",
+                "You turn every mistake into a learning opportunity without making it feel like a lecture.",
+                "Your strategic 'gut feeling' has a higher success rate than most algorithms.",
+                "I'm convinced you could motivate a statue to finish its quarterly reports.",
+                "You ask the kind of questions that make everyone else in the room feel smarter for answering.",
+                "Your vision is so clear, it's like the rest of us are playing checkers while you're playing 4D chess."
+            ],
+            teamwork: [
+                "You consistently go above and beyond to support your colleagues whenever they hit a roadblock.",
+                "Your collaborative spirit makes every brainstorming session more productive and inclusive.",
+                "Thank you for being someone the team can always rely on to deliver high-quality work on time.",
+                "You have an incredible knack for bringing people together and boosting overall team morale.",
+                "I value how you always share credit and celebrate the wins of those around you.",
+                "You are the 'human glue' that keeps this department from falling apart during crunch time.",
+                "If being a team player were an Olympic sport, you'd have more gold medals than Michael Phelps.",
+                "Your positive attitude is more contagious than a yawn in a quiet room.",
+                "You have a way of listening that makes people feel like they’re the only ones in the room.",
+                "Thanks for always being the one to ask 'How can I help?' before being asked.",
+                "Your presence in a Slack channel automatically lowers everyone's stress levels by 15%.",
+                "You're like the unsung hero of every successful deployment we've ever had.",
+                "I'm convinced the office plants grow faster because of your cheerful morning greetings.",
+                "You handle disagreements with so much respect that I actually enjoy debating with you.",
+                "Thank you for always bringing the 'good snacks'—both literally and metaphorically.",
+                "Your ability to pick up the slack without complaining is truly remarkable.",
+                "You make the hard days feel easier just by being yourself.",
+                "I appreciate that you never let a team member struggle in silence.",
+                "Your laugh is the best soundtrack our office has ever had.",
+                "You're the person everyone wants on their project because you make the work feel lighter.",
+                "Thanks for keeping us grounded when our heads get a little too high in the clouds.",
+                "You have a talent for turning 'I' into 'We' in every conversation.",
+                "Your empathy for your teammates makes you a world-class collaborator.",
+                "I've never seen anyone handle a group project with as much patience as you do.",
+                "You don't just meet deadlines; you help three other people meet theirs too."
+            ],
+            growth: [
+                "Your proactive approach to learning new skills is inspiring to everyone on the project.",
+                "I've noticed how effectively you've applied recent feedback to improve your workflow.",
+                "Your resilience in the face of challenging setbacks is a key driver of our team's progress.",
+                "You are constantly looking for ways to optimize our processes, and it shows in our efficiency.",
+                "The way you embrace new challenges with curiosity rather than hesitation is a great example for us all.",
+                "You learn new tools so fast I’m starting to think you’re actually a very polite AI.",
+                "Your 'Can-Do' attitude is so strong, it could probably power a small city.",
+                "I've seen sponges that absorb less information than you do in a single training session.",
+                "Watching your professional evolution this year has been better than any movie sequel.",
+                "You don't just think outside the box; you've basically recycled the box for a better purpose.",
+                "Your curiosity is a superpower that keeps this team from getting stuck in our ways.",
+                "I love how you treat every 'No' as a 'Not Yet' or a 'Let's try a different way'.",
+                "Your ability to pivot when the data changes is a masterclass in agility.",
+                "You have the growth mindset of a Silicon Valley startup and the wisdom of a seasoned pro.",
+                "I appreciate that you're never afraid to say 'I don't know, but I'll find out'.",
+                "Your commitment to self-improvement makes me want to level up my own game.",
+                "You tackle steep learning curves like they're just a gentle stroll in the park.",
+                "The way you've scaled your responsibilities lately has been impressive to witness.",
+                "You are the definition of 'lifelong learner'—and the rest of us are taking notes.",
+                "Your brain seems to have an infinite storage capacity for new methodologies.",
+                "I've never seen anyone turn a 'failure' into a 'success' as gracefully as you do.",
+                "You have a rare talent for finding the lesson in the messiest of situations.",
+                "Your adaptability is the secret weapon that makes our team future-proof.",
+                "You don't just wait for change to happen; you're usually the one leading the charge.",
+                "If personal growth were a currency, you'd be the wealthiest person in the building."
+            ]
+        };
+
+        const generateBtn = document.getElementById('generate-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const selectEl = document.getElementById('category-select');
+        const textDisplay = document.getElementById('compliment-text');
+
+        // State to track last index to avoid immediate repeats
+        let lastIndex = -1;
+
+        /**
+         * Generates a random compliment based on selected category
+         */
+        function generateCompliment() {
+            const category = selectEl.value;
+            const options = library[category];
+            
+            let randomIndex;
+            // Ensure we don't get the same compliment twice in a row
+            do {
+                randomIndex = Math.floor(Math.random() * options.length);
+            } while (randomIndex === lastIndex && options.length > 1);
+
+            lastIndex = randomIndex;
+            const selectedText = options[randomIndex];
+
+            // Update UI
+            textDisplay.textContent = selectedText;
+            textDisplay.classList.remove('placeholder-text');
+            copyBtn.style.display = 'block';
+            copyBtn.textContent = 'Copy to Clipboard';
+        }
+
+        /**
+         * Copies the generated text to the clipboard
+         */
+        function copyToClipboard() {
+            const text = textDisplay.textContent;
+            
+            // Standard fallback for clipboard in local environments
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                copyBtn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy to Clipboard';
+                }, 2000);
+            } catch (err) {
+                console.error('Unable to copy', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Event Listeners
+        generateBtn.addEventListener('click', generateCompliment);
+        copyBtn.addEventListener('click', copyToClipboard);
+    </script>
+</body>
+</html>
