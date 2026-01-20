@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Compliment Generator | Portfolio PM</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <!-- Importing Google Fonts for Montserrat and Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* THE EXECUTIVE SAGE PALETTE
            Primary: #006F87 (Deep Teal)
@@ -46,41 +50,83 @@
         }
 
         .container {
-            width: 100%;
-            max-width: 650px;
+            width: 350px;
+            aspect-ratio: 0.636;
             background: var(--card-bg);
-            padding: 40px;
+            padding: 85px 25px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             border: 1px solid var(--border-color);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+        }
+
+        /* Playing card corner circles */
+        .card-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .card-corner.top-right {
+            top: 15px;
+            right: 15px;
+        }
+
+        .card-corner.bottom-left {
+            bottom: 15px;
+            left: 15px;
+            transform: rotate(180deg);
+        }
+
+        .card-corner i {
+            font-size: 28px;
+        }
+
+        .card-corner .emoji {
+            font-size: 32px;
         }
 
         h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.8rem;
-            margin-bottom: 8px;
+            font-size: 1.2rem;
+            margin: 0 0 2px 0;
             color: var(--primary);
         }
 
         .subtitle {
-            font-size: 0.95rem;
+            font-size: 0.65rem;
             color: #666;
-            margin-bottom: 32px;
+            margin: 0 0 8px 0;
         }
 
         /* Form Elements */
         .controls {
-            margin-bottom: 24px;
+            margin: 0 0 6px 0;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 6px;
             text-align: left;
+            width: 100%;
         }
 
         label {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-color);
@@ -88,12 +134,12 @@
 
         select {
             width: 100%;
-            padding: 12px 16px;
+            padding: 8px 12px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
             background-color: #fff;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
+            font-size: 0.85rem;
             cursor: pointer;
             outline: none;
             transition: var(--transition);
@@ -109,14 +155,14 @@
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px;
+            padding: 10px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.9rem;
             border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         .generate-btn:hover {
@@ -130,24 +176,32 @@
 
         /* Display Area */
         .display-area {
-            margin-top: 40px;
-            padding: 30px;
+            margin: 6px 0 0 0;
+            padding: 12px;
             background-color: var(--secondary);
             border-radius: 12px;
-            min-height: 160px;
+            min-height: 70px;
+            max-height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
             transition: var(--transition);
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        .container {
+            transition: background 0.5s ease;
         }
 
         #compliment-text {
-            font-size: 1.15rem;
+            font-size: 0.9rem;
             font-weight: 500;
             color: var(--primary);
-            margin-bottom: 16px;
+            margin-bottom: 8px;
+            line-height: 1.4;
         }
 
         .placeholder-text {
@@ -160,9 +214,9 @@
             background: #fff;
             border: 1px solid var(--primary);
             color: var(--primary);
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 6px;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             font-weight: 600;
             cursor: pointer;
             display: none; /* Hidden until a compliment is generated */
@@ -177,10 +231,22 @@
         /* Responsive Design */
         @media (max-width: 480px) {
             .container {
-                padding: 24px;
+                width: 280px;
+                padding: 30px 20px;
             }
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+            }
+            .card-corner {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+            .card-corner i {
+                font-size: 22px;
+            }
+            .card-corner .emoji {
+                font-size: 26px;
             }
         }
     </style>
@@ -188,6 +254,9 @@
 <body>
 
     <div class="container">
+        <div class="card-corner top-right" id="top-right-corner"></div>
+        <div class="card-corner bottom-left" id="bottom-left-corner"></div>
+
         <h1>Recognition Generator</h1>
         <p class="subtitle">Fuel a culture of appreciation with professional praise.</p>
 
@@ -321,13 +390,122 @@
             ]
         };
 
+        // Icon options - mix of FontAwesome icons and emojis
+        const cornerIcons = [
+            // Technical
+            { icon: 'fa-code', type: 'fa' },
+            { icon: '💻', type: 'emoji' },
+            { icon: 'fa-laptop', type: 'fa' },
+            { icon: '⚙️', type: 'emoji' },
+            { icon: 'fa-gear', type: 'fa' },
+            { icon: '🔧', type: 'emoji' },
+            { icon: 'fa-microchip', type: 'fa' },
+            { icon: '🤖', type: 'emoji' },
+            // Leadership
+            { icon: 'fa-crown', type: 'fa' },
+            { icon: '👑', type: 'emoji' },
+            { icon: 'fa-star', type: 'fa' },
+            { icon: '⭐', type: 'emoji' },
+            { icon: 'fa-compass', type: 'fa' },
+            { icon: '🧭', type: 'emoji' },
+            // Teamwork
+            { icon: 'fa-handshake', type: 'fa' },
+            { icon: '🤝', type: 'emoji' },
+            { icon: 'fa-people-group', type: 'fa' },
+            { icon: '👥', type: 'emoji' },
+            { icon: 'fa-heart', type: 'fa' },
+            { icon: '❤️', type: 'emoji' },
+            // Growth
+            { icon: 'fa-chart-line', type: 'fa' },
+            { icon: '📈', type: 'emoji' },
+            { icon: 'fa-rocket', type: 'fa' },
+            { icon: '🚀', type: 'emoji' },
+            { icon: 'fa-lightbulb', type: 'fa' },
+            { icon: '💡', type: 'emoji' },
+            { icon: 'fa-brain', type: 'fa' },
+            { icon: '🧠', type: 'emoji' },
+            // General
+            { icon: 'fa-trophy', type: 'fa' },
+            { icon: '🏆', type: 'emoji' },
+            { icon: 'fa-fire', type: 'fa' },
+            { icon: '🔥', type: 'emoji' },
+            { icon: 'fa-diamond', type: 'fa' },
+            { icon: '💎', type: 'emoji' },
+            { icon: 'fa-sun', type: 'fa' },
+            { icon: '☀️', type: 'emoji' },
+            { icon: 'fa-sparkles', type: 'fa' },
+            { icon: '✨', type: 'emoji' },
+            { icon: 'fa-bolt', type: 'fa' },
+            { icon: '⚡', type: 'emoji' },
+        ];
+
+        // Color palette for corners
+        const cornerColors = [
+            '#FF6B6B', // Coral Red
+            '#4ECDC4', // Turquoise
+            '#45B7D1', // Sky Blue
+            '#FFA07A', // Light Salmon
+            '#98D8C8', // Mint
+            '#F7DC6F', // Golden Yellow
+            '#BB8FCE', // Purple
+            '#85C1E2', // Powder Blue
+            '#F8B88B', // Peach
+            '#A3E4D7', // Light Teal
+            '#F5B7B1', // Light Red
+            '#D7BDE2', // Light Purple
+            '#F9E79F', // Light Yellow
+            '#82E0AA', // Light Green
+            '#85DADC', // Cyan
+            '#FF8C42', // Vibrant Orange
+        ];
+
         const generateBtn = document.getElementById('generate-btn');
         const copyBtn = document.getElementById('copy-btn');
         const selectEl = document.getElementById('category-select');
         const textDisplay = document.getElementById('compliment-text');
+        const topRightCorner = document.getElementById('top-right-corner');
+        const bottomLeftCorner = document.getElementById('bottom-left-corner');
+        const container = document.querySelector('.container');
 
         // State to track last index to avoid immediate repeats
         let lastIndex = -1;
+        let currentColors = [];
+
+        /**
+         * Generates random corner decoration with icon and color
+         */
+        function generateCornerDecoration(corner) {
+            const randomColor = cornerColors[Math.floor(Math.random() * cornerColors.length)];
+            const randomIconObj = cornerIcons[Math.floor(Math.random() * cornerIcons.length)];
+
+            corner.style.backgroundColor = randomColor;
+            corner.innerHTML = '';
+
+            if (randomIconObj.type === 'fa') {
+                const icon = document.createElement('i');
+                icon.className = `fas ${randomIconObj.icon}`;
+                corner.appendChild(icon);
+            } else {
+                const emoji = document.createElement('span');
+                emoji.className = 'emoji';
+                emoji.textContent = randomIconObj.icon;
+                corner.appendChild(emoji);
+            }
+
+            return randomColor;
+        }
+
+        /**
+         * Updates the card background with a gradient based on corner colors
+         */
+        function updateCardBackground(color1, color2) {
+            currentColors = [color1, color2];
+            const cardGradient = `linear-gradient(135deg, ${color1}28 0%, ${color2}28 100%)`;
+            container.style.background = cardGradient;
+            
+            const bodyGradient = `linear-gradient(135deg, ${color1}99 0%, ${color2}99 100%)`;
+            document.body.style.background = bodyGradient;
+        }
 
         /**
          * Generates a random compliment based on selected category
@@ -344,6 +522,18 @@
 
             lastIndex = randomIndex;
             const selectedText = options[randomIndex];
+
+            // Generate new corner decorations and get their colors
+            const color1 = generateCornerDecoration(topRightCorner);
+            
+            // Ensure the second color is different from the first
+            let color2;
+            do {
+                color2 = generateCornerDecoration(bottomLeftCorner);
+            } while (color2 === color1);
+
+            // Update card background with gradient of the corner colors
+            updateCardBackground(color1, color2);
 
             // Update UI
             textDisplay.textContent = selectedText;
@@ -376,6 +566,14 @@
             
             document.body.removeChild(textArea);
         }
+
+        // Initialize corners with random decoration and set background
+        const initialColor1 = generateCornerDecoration(topRightCorner);
+        let initialColor2;
+        do {
+            initialColor2 = generateCornerDecoration(bottomLeftCorner);
+        } while (initialColor2 === initialColor1);
+        updateCardBackground(initialColor1, initialColor2);
 
         // Event Listeners
         generateBtn.addEventListener('click', generateCompliment);
